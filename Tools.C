@@ -1,3 +1,9 @@
+/*
+Mitchel Carson
+Systems I 
+Dr. Hamza
+Lab 01
+*/
 #include <cstdint>
 #include <cstdlib>
 #include <string>
@@ -43,7 +49,14 @@
 */
 uint64_t Tools::buildLong(uint8_t bytes[LONGSIZE])
 {
-  return 0;
+  uint64_t returnLong = 0;
+
+  for (int i = 7; i >= 0; i--)
+  {
+    returnLong = returnLong << 8;
+    returnLong = returnLong | bytes[i];
+  }
+  return returnLong;
 }
 
 /** 
@@ -67,7 +80,13 @@ uint64_t Tools::buildLong(uint8_t bytes[LONGSIZE])
 */
 uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
 {
-  return 0;
+  uint64_t returnLong = 0;
+  if (byteNum >= 0 && byteNum < 8)
+  {
+    returnLong = source >> (byteNum * 8);
+    returnLong = returnLong & 0xff;
+  }
+  return returnLong;
 }
 
 /**
@@ -97,7 +116,13 @@ uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 {
-  return 0;
+  uint64_t returnLong = 0;
+  if (low >= 0 && low <= 63 && high >= 0 && high <= 63)
+  {
+    returnLong = source >> low;
+    returnLong = returnLong & ((1 << (high - low + 1)) - 1);
+  }
+  return returnLong;
 }
 
 

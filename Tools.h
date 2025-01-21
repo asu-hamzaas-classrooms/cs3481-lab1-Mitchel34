@@ -1,3 +1,9 @@
+/*
+Mitchel Carson
+Systems I 
+Dr. Hamza
+Lab 01
+*/
 #include <cstdint>
 #define LONGSIZE 8
 #ifndef TOOLS_H
