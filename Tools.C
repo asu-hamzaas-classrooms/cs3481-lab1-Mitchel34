@@ -116,14 +116,26 @@ uint64_t Tools::getByte(uint64_t source, int32_t byteNum)
  */
 uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
 {
-  uint64_t returnLong = 0;
-  if (low >= 0 && low <= 63 && high >= 0 && high <= 63)
-  {
-    returnLong = source >> low;
-    returnLong = returnLong & ((1 << (high - low + 1)) - 1);
-  }
-  return returnLong;
+    
+    // Single 'if' for input validation
+    if (low < 0 || high < 0 || low > 63 || high > 63 || low > high)
+    {
+        return 0;
+    }
+
+    // Compute how many bits we need
+    int32_t numBits = high - low + 1;
+
+    // Build the mask safely (avoid shifting by 64)
+    // ~0ULL is 0xFFFFFFFFFFFFFFFF (all bits set)
+    uint64_t mask = (numBits == 64) ? ~0ULL : ((1ULL << numBits) - 1ULL);
+
+    // Shift right so that 'low' bit is at position 0, then mask
+    return (source >> low) & mask;
+
 }
+
+
 
 
 /**
@@ -150,7 +162,24 @@ uint64_t Tools::getBits(uint64_t source, int32_t low, int32_t high)
  */
 uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
 {
-  return 0;
+  // Single 'if' for input validation
+    if (low < 0 || high < 0 || low > 63 || high > 63 || low > high)
+    {
+        return source;
+    }
+
+    // Compute how many bits to set
+    int32_t numBits = high - low + 1;
+
+    // Build the mask safely (avoid shifting by 64)
+    // ~0ULL sets all bits to 1
+    uint64_t mask = (numBits == 64) ? ~0ULL : ((1ULL << numBits) - 1ULL);
+
+    // Shift the mask left by 'low' bits to align it to the target range
+    mask <<= low;
+
+    // Set bits in the source by OR-ing with the mask
+    return source | mask;
 }
 
 /**
@@ -175,7 +204,14 @@ uint64_t Tools::setBits(uint64_t source, int32_t low, int32_t high)
  */
 uint64_t Tools::clearBits(uint64_t source, int32_t low, int32_t high)
 {
-  return 0;
+  if (low >= 0 && low <= 63 && high >= 0 && high <= 63)
+  {
+    return 0;
+  }
+  else
+  {
+    return source;
+  }
 }
 
 
